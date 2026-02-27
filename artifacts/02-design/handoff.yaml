@@ -1,0 +1,199 @@
+handoff:
+  from: ux-ui-designer
+  to: [architect, frontend-developer]
+  date: 2026-02-27
+
+summary: |
+  Design completo do SW Painel -- painel digital fullscreen para LED de 2x4m
+  que exibe a jornada "From Zero to Hero" das equipes do Startup Weekend.
+
+  Foram definidos: identidade visual (conceito "Circuito de Energia"),
+  design system com tokens completos, layout serpentina (2 fileiras, 4 etapas cada),
+  5 estados visuais dos cards, 4 niveis de celebracao + pivot com timing detalhado,
+  painel admin funcional, e mapa completo de estados e transicoes.
+
+  Todas as 4 decisoes de design pendentes (DEC-02, DEC-03/06, DEC-04, DEC-10)
+  foram resolvidas com justificativa.
+
+deliverables:
+  - path: artifacts/02-design/design-system.md
+    description: |
+      Design System completo com conceito visual, paleta de cores (principal + auxiliar + estados + etapas),
+      tipografia para LED 4K (legivel a 10-15m), espacamento e grid, bordas e sombras (glow system),
+      animacoes (timing functions, duracoes por nivel), icones por etapa, z-index layers.
+
+  - path: artifacts/02-design/design-tokens.json
+    description: |
+      Tokens de design em JSON estruturado: cores, tipografia, espacamento, layout,
+      bordas, sombras, animacoes, z-index. Pronto para consumo programatico.
+
+  - path: artifacts/02-design/wireframes/panel-layout.md
+    description: |
+      Wireframe ASCII do painel principal com layout serpentina (2 fileiras).
+      Inclui estados: success (happy path com 12 equipes), loading, empty, error, paused.
+      Dimensoes detalhadas, distribuicao horizontal, regras de agrupamento.
+
+  - path: artifacts/02-design/wireframes/card-design.md
+    description: |
+      Design dos cards de equipe com 5 estados visuais (ativa, aguardando, celebrando,
+      pivotada, HERO). Inclui dimensoes por densidade, card fallback sem imagem,
+      regras de agrupamento (1-2, 3-4, 5-8, 9+ equipes), transicao entre etapas.
+
+  - path: artifacts/02-design/wireframes/celebrations.md
+    description: |
+      Design detalhado dos 4 niveis de celebracao + pivot + estado aguardando.
+      Cada nivel com fases temporais (ms), efeitos visuais, budget de particulas,
+      cores usadas. Regras da fila de celebracoes e prioridade HERO.
+
+  - path: artifacts/02-design/wireframes/admin-panel.md
+    description: |
+      Wireframe do painel admin (/admin) com login, dashboard, tabela de equipes,
+      controles (pausar/retomar/reset), log de eventos, modais (celebracao e override).
+      Inclui estados: success, loading, empty, error, paused.
+
+  - path: artifacts/02-design/wireframes/states-and-transitions.md
+    description: |
+      Diagrama de estados do card e do painel. Tabela completa de transicoes.
+      Timing detalhado (ms) de cada transicao. Prioridade de animacoes.
+      Mapa de cores por transicao de etapa.
+
+  - path: artifacts/02-design/sitemap.md
+    description: Arquitetura de informacao com rotas Next.js sugeridas.
+
+  - path: artifacts/02-design/user-flows.md
+    description: |
+      5 fluxos criticos: audiencia observa painel, staff opera admin,
+      reconexao automatica, fila de celebracoes, carga com localStorage.
+
+  - path: artifacts/02-design/components.md
+    description: |
+      Biblioteca de componentes (Display + Admin) com specs detalhadas.
+      Mapeamento componente-a-user-story.
+
+  - path: artifacts/02-design/tailwind.config.js
+    description: Configuracao Tailwind pronta para uso com todos os tokens do design system.
+
+design_decisions:
+  DEC-02:
+    decision: Layout Serpentina (2 fileiras, caminho em S)
+    justification: |
+      A proporcao 1:2 desperdicaria ~50% do espaco vertical com layout linear.
+      A serpentina usa ambas as fileiras (4 etapas cada), cria narrativa visual
+      de jornada, e mantem complexidade moderada de implementacao.
+      Fileira superior: esquerda-direita (ZERO a VALIDACAO).
+      Fileira inferior: direita-esquerda (MVP a HERO).
+
+  DEC-03_06:
+    decision: Fan-out vertical com redimensionamento adaptativo
+    justification: |
+      Cards se organizam verticalmente abaixo do nodo da etapa.
+      1-2 equipes: tamanho padrao (200x240px).
+      3-4: tamanho medio (170x204px), grid 2x2.
+      5-8: tamanho minimo (140x168px), grid 3xN.
+      9+: tamanho minimo + rotacao temporal (exibe 8, rotaciona a cada 4s).
+      Garante legibilidade a 10m no tamanho minimo.
+
+  DEC-04:
+    decision: Sistema de "energia violeta" com glow + particulas na paleta
+    justification: |
+      Celebracoes usam APENAS cores da paleta (violeta, branco, limao, dourado para HERO).
+      Nenhum confetti colorido generico. Glow (brilho) e a linguagem principal.
+      Particulas sao pontos/tracos de luz (nao formas geometricas).
+      Budget de particulas por nivel garante 60fps.
+
+  DEC-10:
+    decision: Conceito "Circuito de Energia" (neural pathway organico)
+    justification: |
+      Combina estetica tech (circuito, conexoes) com organicidade (blobs, curvas).
+      A trilha e um "filamento de energia" que pulsa quando equipes avancam.
+      Nodos sao sinapses que brilham quando ativados. Cards flutuam como
+      unidades de energia. Conceito reforca a identidade visual violeta/preto
+      sem depender de temas genericos (espaco, medieval, etc.).
+
+technical_notes:
+  - |
+    A tipografia para LED 4K precisa ser testada no hardware real.
+    Os tamanhos definidos sao baseados em calculo (1cm LED = ~9.6px em 3840px),
+    mas podem precisar de ajuste fino apos teste no painel fisico.
+  - |
+    O sistema de particulas (Canvas 2D) deve ser isolado em um componente
+    que cria/destroi o canvas dinamicamente, evitando memory leaks em 54h.
+  - |
+    As animacoes de celebracao tem timeline detalhada por fase (ms).
+    Isso e uma referencia para implementacao -- o developer pode ajustar
+    timings em +/- 20% sem comprometer o design.
+  - |
+    O layout serpentina usa SVG para a trilha (path bezier entre nodos).
+    Posicionamento de cards e via CSS absolute/flexbox dentro de areas da grid.
+  - |
+    Admin nao precisa da paleta completa de celebracoes. Pode ser implementado
+    com Tailwind puro sem biblioteca de animacao.
+
+next_steps:
+  - "Architect: Definir folder structure alinhada com route groups (/(display) e /(admin))"
+  - "Architect: Resolver DEC-01 (Framer Motion vs GSAP) considerando budget de particulas documentado"
+  - "Architect: Resolver DEC-03 (Zustand) para gerenciamento de estado com celebration queue"
+  - "Architect: Criar implementation plan com tasks mapeadas para os wireframes"
+  - "Frontend Developer: Implementar PanelContainer com aspect-ratio 2/1 e safe area"
+  - "Frontend Developer: Implementar Trail como SVG serpentina com StageNodes"
+  - "Frontend Developer: Implementar TeamCard com 5 estados visuais"
+  - "Frontend Developer: Implementar CelebrationOverlay com ParticleSystem"
+  - "Frontend Developer: Implementar AdminLayout com TeamTable e EventLog"
+  - "Frontend Developer: Usar tailwind.config.js fornecido como base"
+
+us_coverage:
+  - us: US-010
+    wireframe: panel-layout.md
+    components: [PanelContainer, Trail, StageNode, BackgroundBlobs]
+  - us: US-011
+    wireframe: panel-layout.md
+    components: [PanelContainer]
+  - us: US-012
+    wireframe: panel-layout.md, card-design.md
+    components: [TeamCard, StageNode]
+  - us: US-013
+    wireframe: panel-layout.md, card-design.md
+    components: [StageNode, TeamCard]
+    notes: Tipografia testavel apenas no LED real
+  - us: US-014
+    wireframe: card-design.md
+    components: [TeamCard, TeamCardPlaceholder]
+  - us: US-015
+    wireframe: panel-layout.md, card-design.md
+    components: [Trail, TeamCard]
+  - us: US-016
+    wireframe: card-design.md, states-and-transitions.md
+    components: [TeamCard]
+  - us: US-017
+    wireframe: celebrations.md
+    components: [CelebrationOverlay]
+  - us: US-018
+    wireframe: celebrations.md
+    components: [CelebrationOverlay, ParticleSystem]
+  - us: US-019
+    wireframe: celebrations.md
+    components: [CelebrationOverlay, ParticleSystem]
+  - us: US-020
+    wireframe: celebrations.md
+    components: [CelebrationOverlay]
+  - us: US-021
+    wireframe: celebrations.md, states-and-transitions.md
+    components: [CelebrationOverlay]
+  - us: US-022
+    wireframe: admin-panel.md
+    components: [AdminLayout, AdminHeader, TeamTable, ControlBar, EventLog]
+  - us: US-023
+    wireframe: admin-panel.md
+    components: [Modal, Button, RadioGroup]
+  - us: US-024
+    wireframe: admin-panel.md
+    components: [ControlBar, Button, PauseIndicator]
+  - us: US-025
+    wireframe: admin-panel.md
+    components: [EventLog]
+  - us: US-026
+    wireframe: panel-layout.md (estado error)
+    components: [ConnectionIndicator]
+  - us: US-027
+    wireframe: card-design.md (fallback)
+    components: [TeamCardPlaceholder]

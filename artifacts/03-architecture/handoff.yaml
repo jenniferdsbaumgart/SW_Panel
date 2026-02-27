@@ -1,0 +1,58 @@
+handoff:
+  from: architect
+  to: frontend-developer
+  date: 2026-02-27
+
+summary: |
+  Arquitetura completa do SW Painel definida. 6 ADRs documentam decisoes
+  tecnicas (WebSocket, Zustand, Framer Motion + Canvas, imagem pronta,
+  reconexao, som). Folder structure, component tree, state management,
+  e WebSocket architecture detalhados. Implementation plan com 24 tasks
+  em 3 fases aguarda aprovacao humana.
+
+deliverables:
+  - path: artifacts/03-architecture/adr/ADR-001-websocket-vs-sse.md
+    description: "Decisao: WebSocket (contrato do Gerencial ja define)"
+  - path: artifacts/03-architecture/adr/ADR-002-state-management.md
+    description: "Decisao: Zustand com selectors granulares"
+  - path: artifacts/03-architecture/adr/ADR-003-animation-stack.md
+    description: "Decisao: Framer Motion (DOM) + Canvas 2D (particulas)"
+  - path: artifacts/03-architecture/adr/ADR-004-card-visual.md
+    description: "Decisao: Imagem pronta via image_url do n8n"
+  - path: artifacts/03-architecture/adr/ADR-005-reconnection-resilience.md
+    description: "Estrategia de reconexao com exponential backoff"
+  - path: artifacts/03-architecture/adr/ADR-006-sound-celebrations.md
+    description: "Som opcional, off por padrao, toggle no admin (Fase 3)"
+  - path: artifacts/03-architecture/folder-structure.md
+    description: "Estrutura completa do projeto Next.js com detalhamento"
+  - path: artifacts/03-architecture/component-tree.md
+    description: "Hierarquia de componentes React (display + admin)"
+  - path: artifacts/03-architecture/state-management.md
+    description: "Zustand store, actions, selectors, fluxo completo"
+  - path: artifacts/03-architecture/websocket-architecture.md
+    description: "WebSocketClient class, hook, parser, reconexao"
+  - path: artifacts/03-architecture/implementation-plan.md
+    description: "24 tasks em 3 fases com dependencias e estimativas"
+  - path: artifacts/03-architecture/CLAUDE.md
+    description: "Contexto para desenvolvedores (copiado para raiz)"
+
+key_decisions:
+  DEC-01: "Horizontal (2m alt x 4m larg) - obvio para 1:2"
+  DEC-05: "WebSocket (contrato do Gerencial ja define, SSE nao disponivel)"
+  DEC-06: "Zustand (selectors granulares, funciona fora do React)"
+  DEC-07: "Som opcional Fase 3, Web Audio API, off por padrao"
+  DEC-08: "Framer Motion (DOM 80%) + Canvas 2D (particulas 20%)"
+  DEC-09: "Imagem pronta via image_url (confirmado contrato existente)"
+
+next_steps:
+  - "Aguardar aprovacao humana do implementation-plan.md"
+  - "Iniciar TASK-002-DEV: Setup Next.js + TypeScript + Tailwind + Zustand"
+  - "Seguir ordem de execucao do implementation plan"
+  - "Usar CLAUDE.md como referencia durante todo o desenvolvimento"
+
+blockers: []
+
+notes:
+  - "02-design/ esta vazio. Wireframes nao foram criados. O visual sera iterado durante desenvolvimento baseado nos specs do Discovery."
+  - "O contrato WebSocket ja esta completamente definido em artifacts/01-discovery/api-contract.md"
+  - "Nao ha banco de dados, Prisma, nem API REST. Este e um client-side display app."

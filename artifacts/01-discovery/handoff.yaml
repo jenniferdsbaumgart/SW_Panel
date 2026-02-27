@@ -1,0 +1,146 @@
+handoff:
+  from: product-strategist
+  to: ux-ui-designer
+  date: 2026-02-27
+
+summary: |
+  Discovery completo do SW Painel - painel digital fullscreen para LED de 2x4m
+  que exibe a jornada "From Zero to Hero" das equipes do Startup Weekend em
+  tempo real, com celebracoes visuais a cada avanço.
+
+  O SW Painel e um cliente WebSocket que recebe eventos do Gerencial, mantem
+  estado em memoria, renderiza trilha board game com 8 etapas + pivot, e
+  dispara 4 niveis de celebracao. Inclui painel admin basico para staff.
+
+  Mudanca principal em relacao a versao anterior: WebSocket (nao SSE),
+  estado em memoria (nao SQLite), 8 etapas definidas (nao 9), identidade
+  visual especifica (violeta/preto/verde-limao), celebracoes com 4 niveis.
+
+deliverables:
+  - path: artifacts/01-discovery/vision.md
+    description: Vision document com problema, solucao, publico-alvo, metricas, fases de entrega, restricoes e premissas.
+
+  - path: artifacts/01-discovery/user-stories.md
+    description: 29 user stories organizadas em 6 epicos (EP-01 a EP-06) com criterios de aceite, prioridade MoSCoW, estimativa T-shirt e fase de entrega.
+
+  - path: artifacts/01-discovery/journey-stages.md
+    description: Documentacao das 8 etapas da jornada + pivot, com regras de transicao, niveis de celebracao e identidade visual por etapa.
+
+  - path: artifacts/01-discovery/api-contract.md
+    description: Contrato WebSocket completo com 7 tipos de eventos, interfaces TypeScript detalhadas, protocolo de reconexao.
+
+  - path: artifacts/01-discovery/data-model.md
+    description: Modelo de dados in-memory com estruturas TypeScript (PanelState, TeamState, CelebrationQueue), fluxos de atualizacao e estrategia de persistencia opcional via localStorage.
+
+  - path: artifacts/01-discovery/decisions.md
+    description: 10 decisoes tecnicas em aberto com contexto, opcoes e recomendacoes.
+
+key_decisions:
+  - "WebSocket client (nao server) conectado a /ws/journey do Gerencial"
+  - "Estado em memoria, sem banco de dados (reconstruido via evento sync)"
+  - "8 etapas sequenciais: ZERO, IDEIA, PROBLEMA, VALIDACAO, MVP, SOL.VALIDADA, PITCH, HERO + PIVOT"
+  - "4 niveis de celebracao: leve (~2s), media-alta (~5s), maxima (~8s), pivot (~3s)"
+  - "5 estados visuais: ativa, aguardando, celebrando, pivotada, HERO"
+  - "Proporcao fixa 1:2 para LED 2x4m"
+  - "Paleta: Violeta #7C3AED (60%), Preto #0F0A1A (25%), Branco #FFFFFF (10%), Verde-Limao #BFFF00 (5%)"
+  - "Tipografia: Montserrat Black (display) + Inter (corpo)"
+  - "3 fases de entrega: MVP, Visual Completo, Polish"
+  - "Cards gerados externamente pelo n8n, painel apenas exibe"
+
+decisions_pending_for_design:
+  - "DEC-02: Layout da trilha (linear vs serpentina vs board game)"
+  - "DEC-06: Como exibir multiplas equipes na mesma etapa"
+  - "DEC-01: Biblioteca de animacao (Framer Motion vs GSAP) - decisao final afeta viabilidade de efeitos"
+
+decisions_pending_for_architecture:
+  - "DEC-01: Biblioteca de animacao (Framer Motion vs GSAP vs hibrido)"
+  - "DEC-03: Gerenciamento de estado (Zustand recomendado)"
+  - "DEC-07: Estrutura de rotas (route groups recomendado)"
+  - "DEC-08: Autenticacao do admin (senha simples recomendada)"
+  - "DEC-09: Carregamento de fontes (next/font local recomendado)"
+
+personas:
+  - name: Audiencia
+    description: Qualquer pessoa observando o painel LED a 10-15m. Interacao passiva.
+  - name: Staff SW
+    description: Membro da equipe organizadora que opera o painel admin. Interacao ativa.
+  - name: Sistema
+    description: O SW Painel como cliente WebSocket recebendo eventos do Gerencial.
+
+epics:
+  - id: EP-01
+    name: Conexao e Dados
+    stories: 9
+    must_have: 5
+    description: WebSocket, reconexao, sync, eventos, estado em memoria
+
+  - id: EP-02
+    name: Trilha e Layout
+    stories: 4
+    must_have: 4
+    description: Board game, 8 etapas, proporcao 1:2, legibilidade
+
+  - id: EP-03
+    name: Cards das Equipes
+    stories: 3
+    must_have: 3
+    description: Renderizar card, posicionar na etapa, 5 estados visuais
+
+  - id: EP-04
+    name: Celebracoes
+    stories: 5
+    must_have: 1
+    description: 4 niveis, fila sequencial, pivot, HERO
+
+  - id: EP-05
+    name: Admin
+    stories: 4
+    must_have: 0
+    description: Estado, override, pause/resume, log
+
+  - id: EP-06
+    name: Resiliencia
+    stories: 4
+    must_have: 2
+    description: Reconexao graceful, fallback cards, localStorage, 60fps
+
+sizing:
+  total_stories: 29
+  must_have: 15
+  should_have: 11
+  could_have: 3
+  estimated_total_days: 23.5
+  phase_1_mvp_days: 10
+  phase_2_visual_days: 10
+  phase_3_polish_days: 3.5
+
+next_steps:
+  - "UX/UI Designer: Criar wireframes do painel LED (proporcao 1:2) com trilha board game"
+  - "UX/UI Designer: Definir layout para 8-15 equipes distribuidas em 8 etapas (DEC-02, DEC-06)"
+  - "UX/UI Designer: Criar design tokens baseados na paleta definida"
+  - "UX/UI Designer: Projetar estados visuais dos cards (5 estados)"
+  - "UX/UI Designer: Projetar niveis de celebracao (visual base para cada nivel)"
+  - "UX/UI Designer: Projetar tela admin basica"
+  - "Architect: Resolver decisoes DEC-01, DEC-03, DEC-07, DEC-08, DEC-09"
+  - "Architect: Definir folder structure e implementation plan"
+
+tech_stack:
+  framework: "Next.js 15 (App Router)"
+  language: TypeScript
+  styling: "Tailwind CSS"
+  animations: "Framer Motion ou GSAP (decisao em aberto)"
+  realtime: "WebSocket client (/ws/journey)"
+  state: "In-memory (Zustand recomendado)"
+  persistence: "Nenhuma (localStorage como fallback opcional)"
+  fonts: "Montserrat Black + Inter (next/font local)"
+
+constraints:
+  - "Proporcao fixa 1:2 para LED 2x4m"
+  - "Legibilidade a 10-15 metros"
+  - "60fps constante"
+  - "54h de operacao continua sem degradacao"
+  - "Latencia evento-animacao < 500ms"
+  - "Reconexao WebSocket < 5s"
+  - "SEM cores quentes na identidade visual"
+  - "SEM skyline SW"
+  - "Display-only no painel publico (sem interacao)"

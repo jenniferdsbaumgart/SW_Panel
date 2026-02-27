@@ -1,0 +1,177 @@
+{
+  "colors": {
+    "primary": {
+      "violet": "#7C3AED",
+      "violet-deep": "#4C1D95",
+      "violet-dark": "#5B21B6",
+      "violet-light": "#8B5CF6",
+      "violet-lighter": "#A78BFA",
+      "lavender": "#DDD6FE",
+      "lilac": "#C4B5FD"
+    },
+    "neutral": {
+      "night": "#0F0A1A",
+      "night-light": "#1A1128",
+      "night-lighter": "#2D1F4E",
+      "white": "#FFFFFF"
+    },
+    "accent": {
+      "lime": "#BFFF00",
+      "gold": "#FFD700",
+      "indigo": "#818CF8"
+    },
+    "state": {
+      "active": "#7C3AED",
+      "waiting": "#BFFF00",
+      "celebrating": "#FFFFFF",
+      "pivoted": "#818CF8",
+      "hero": "#FFD700"
+    },
+    "stage": {
+      "zero": "#7C3AED",
+      "ideia": "#8B5CF6",
+      "problema": "#A78BFA",
+      "validacao": "#BFFF00",
+      "mvp": "#C4B5FD",
+      "sol_validada": "#BFFF00",
+      "pitch": "#DDD6FE",
+      "hero": "#FFD700"
+    },
+    "admin": {
+      "bg": "#0F0A1A",
+      "surface": "#1A1128",
+      "surface-hover": "#2D1F4E",
+      "border": "#5B21B6",
+      "text-primary": "#FFFFFF",
+      "text-secondary": "#C4B5FD",
+      "success": "#22C55E",
+      "warning": "#BFFF00",
+      "error": "#EF4444",
+      "info": "#818CF8"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "display": "Montserrat, system-ui, sans-serif",
+      "body": "Inter, system-ui, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "fontWeight": {
+      "display": 900,
+      "body-regular": 400,
+      "body-medium": 500,
+      "body-semibold": 600,
+      "body-bold": 700
+    },
+    "fontSize": {
+      "panel": {
+        "hero": "192px",
+        "team-celebration": "128px",
+        "stage-name": "96px",
+        "stage-label": "64px",
+        "team-name": "48px",
+        "info": "36px",
+        "small": "24px"
+      },
+      "admin": {
+        "h1": "24px",
+        "h2": "20px",
+        "body": "16px",
+        "small": "14px",
+        "mono": "13px"
+      }
+    },
+    "lineHeight": {
+      "tight": 1.1,
+      "normal": 1.3,
+      "relaxed": 1.5
+    }
+  },
+  "spacing": {
+    "1": "8px",
+    "2": "16px",
+    "3": "24px",
+    "4": "32px",
+    "6": "48px",
+    "8": "64px",
+    "12": "96px",
+    "16": "128px"
+  },
+  "layout": {
+    "panel": {
+      "width": 3840,
+      "height": 1920,
+      "aspectRatio": "2/1",
+      "safeArea": "64px",
+      "usableWidth": 3712,
+      "usableHeight": 1792
+    },
+    "card": {
+      "width": "200px",
+      "height": "240px",
+      "minWidth": "140px",
+      "minHeight": "168px"
+    },
+    "stageNode": {
+      "diameter": "120px",
+      "minDiameter": "80px"
+    },
+    "trail": {
+      "width": "6px",
+      "glowRadius": "12px"
+    }
+  },
+  "borders": {
+    "radius": {
+      "card": "16px",
+      "node": "50%",
+      "button": "8px",
+      "badge": "6px"
+    },
+    "width": {
+      "card": "3px",
+      "card-hero": "4px",
+      "trail": "6px",
+      "pivot-dash": "3px"
+    }
+  },
+  "shadows": {
+    "glow-violet": "0 0 20px rgba(124, 58, 237, 0.5)",
+    "glow-violet-intense": "0 0 40px rgba(124, 58, 237, 0.8)",
+    "glow-lime": "0 0 24px rgba(191, 255, 0, 0.6)",
+    "glow-white": "0 0 40px rgba(255, 255, 255, 0.8)",
+    "glow-gold": "0 0 30px rgba(255, 215, 0, 0.7)",
+    "glow-trail": "0 0 12px rgba(124, 58, 237, 0.3)",
+    "card-elevated": "0 8px 32px rgba(0, 0, 0, 0.4)"
+  },
+  "animation": {
+    "easing": {
+      "smooth": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "bounce": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+      "celebrate": "cubic-bezier(0.22, 1, 0.36, 1)",
+      "pulse": "ease-in-out"
+    },
+    "duration": {
+      "instant": "100ms",
+      "fast": "200ms",
+      "normal": "400ms",
+      "slow": "800ms",
+      "celebration-light": "2000ms",
+      "celebration-medium": "3000ms",
+      "celebration-medium-high": "5000ms",
+      "celebration-max": "8000ms",
+      "celebration-pivot": "3000ms",
+      "pulse-cycle": "2000ms",
+      "blob-morph": "20000ms"
+    }
+  },
+  "zIndex": {
+    "background": 0,
+    "trail": 10,
+    "cards": 20,
+    "card-elevated": 30,
+    "celebration-overlay": 40,
+    "hero-takeover": 50,
+    "status-indicators": 60
+  }
+}
