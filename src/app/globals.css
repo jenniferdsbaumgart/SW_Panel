@@ -1,26 +1,193 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================
+   Design Tokens - SW Painel
+   ============================================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* --- Colors: Primary --- */
+  --color-violet: #7C3AED;
+  --color-violet-deep: #4C1D95;
+  --color-violet-dark: #5B21B6;
+  --color-violet-light: #8B5CF6;
+  --color-violet-lighter: #A78BFA;
+  --color-lavender: #DDD6FE;
+  --color-lilac: #C4B5FD;
+
+  /* --- Colors: Neutral --- */
+  --color-night: #0F0A1A;
+  --color-night-light: #1A1128;
+  --color-night-lighter: #2D1F4E;
+
+  /* --- Colors: Accent --- */
+  --color-lime: #BFFF00;
+  --color-gold: #FFD700;
+  --color-indigo: #818CF8;
+
+  /* --- Colors: State --- */
+  --color-state-active: #7C3AED;
+  --color-state-waiting: #BFFF00;
+  --color-state-celebrating: #FFFFFF;
+  --color-state-pivoted: #818CF8;
+  --color-state-hero: #FFD700;
+
+  /* --- Fonts --- */
+  --font-display: "Montserrat", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  /* --- Font Sizes: Panel (LED) --- */
+  --text-panel-hero: 192px;
+  --text-panel-team-celebration: 128px;
+  --text-panel-stage-name: 96px;
+  --text-panel-stage-label: 64px;
+  --text-panel-team-name: 48px;
+  --text-panel-info: 36px;
+  --text-panel-small: 24px;
+
+  /* --- Font Sizes: Admin --- */
+  --text-admin-h1: 24px;
+  --text-admin-h2: 20px;
+  --text-admin-body: 16px;
+  --text-admin-small: 14px;
+
+  /* --- Spacing: Panel --- */
+  --spacing-safe: 64px;
+  --spacing-panel-1: 8px;
+  --spacing-panel-2: 16px;
+  --spacing-panel-3: 24px;
+  --spacing-panel-4: 32px;
+  --spacing-panel-6: 48px;
+  --spacing-panel-8: 64px;
+  --spacing-panel-12: 96px;
+  --spacing-panel-16: 128px;
+
+  /* --- Shadows (Glow) --- */
+  --shadow-glow-violet: 0 0 20px rgba(124, 58, 237, 0.5);
+  --shadow-glow-violet-intense: 0 0 40px rgba(124, 58, 237, 0.8);
+  --shadow-glow-lime: 0 0 24px rgba(191, 255, 0, 0.6);
+  --shadow-glow-white: 0 0 40px rgba(255, 255, 255, 0.8);
+  --shadow-glow-gold: 0 0 30px rgba(255, 215, 0, 0.7);
+  --shadow-glow-trail: 0 0 12px rgba(124, 58, 237, 0.3);
+  --shadow-card-elevated: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+  /* --- Transition Timing --- */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-celebrate: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* --- Z-Index --- */
+  --z-background: 0;
+  --z-trail: 10;
+  --z-cards: 20;
+  --z-card-elevated: 30;
+  --z-celebration-overlay: 40;
+  --z-hero-takeover: 50;
+  --z-status-indicators: 60;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ============================================================
+   Fullscreen Reset
+   ============================================================ */
+
+html,
+body {
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  background-color: #0F0A1A;
+  color: #FFFFFF;
+}
+
+/* ============================================================
+   Keyframe Animations
+   ============================================================ */
+
+@keyframes pulse-waiting {
+  0%, 100% {
+    opacity: 0.4;
+    box-shadow: 0 0 12px rgba(191, 255, 0, 0.3);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 24px rgba(191, 255, 0, 0.6);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes blob-morph {
+  0%, 100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  50% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
+}
+
+@keyframes flash-white {
+  0% { opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0; }
+}
+
+@keyframes card-bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes vibrate {
+  0%, 100% { transform: translateX(0); }
+  12.5% { transform: translateX(-3px); }
+  25% { transform: translateX(3px); }
+  37.5% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  62.5% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+  87.5% { transform: translateX(-3px); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes scale-hero {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes blob-drift-0 {
+  0%, 100% { transform: translate(-50%, -50%) translate(0, 0); }
+  33% { transform: translate(-50%, -50%) translate(30px, -20px); }
+  66% { transform: translate(-50%, -50%) translate(-20px, 15px); }
+}
+
+@keyframes blob-drift-1 {
+  0%, 100% { transform: translate(-50%, -50%) translate(0, 0); }
+  33% { transform: translate(-50%, -50%) translate(-25px, 25px); }
+  66% { transform: translate(-50%, -50%) translate(20px, -10px); }
+}
+
+@keyframes blob-drift-2 {
+  0%, 100% { transform: translate(-50%, -50%) translate(0, 0); }
+  33% { transform: translate(-50%, -50%) translate(15px, 30px); }
+  66% { transform: translate(-50%, -50%) translate(-30px, -15px); }
+}
+
+@keyframes energy-flow {
+  0% { left: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+
+@keyframes node-pulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(124, 58, 237, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(124, 58, 237, 0.6); }
 }
