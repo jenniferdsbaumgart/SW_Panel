@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import { useWebSocket } from "@/hooks/use-websocket";
+import { useStoreHydration } from "@/hooks/use-store-hydration";
 import { JourneyTrack } from "./journey-track";
 import { BackgroundBlobs } from "./background-blobs";
 import { CelebrationOverlay } from "@/components/celebrations/celebration-overlay";
@@ -15,6 +16,7 @@ import { DemoControls } from "@/components/demo/demo-controls";
  * Layers: Background blobs → Track → Celebrations → Status indicators
  */
 export function JourneyBoard() {
+  useStoreHydration();
   useWebSocket();
 
   return (

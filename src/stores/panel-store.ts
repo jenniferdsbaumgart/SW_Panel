@@ -487,6 +487,7 @@ export const usePanelStore = create<PanelStore>()(
         teams: state.teams,
         lastSyncAt: state.lastSyncAt,
       }),
+      skipHydration: true,
     }
   )
 );

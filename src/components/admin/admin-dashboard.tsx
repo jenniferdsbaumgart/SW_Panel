@@ -2,12 +2,14 @@
 
 import { useAdminStore } from "@/stores/admin-store";
 import { useWebSocket } from "@/hooks/use-websocket";
+import { useStoreHydration } from "@/hooks/use-store-hydration";
 import { ConnectionStatus } from "./connection-status";
 import { PanelControls } from "./panel-controls";
 import { TeamList } from "./team-list";
 import { EventLog } from "./event-log";
 
 export function AdminDashboard() {
+  useStoreHydration();
   const logout = useAdminStore((s) => s.logout);
 
   // Admin runs in its own tab, so it needs its own WebSocket connection

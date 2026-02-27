@@ -24,6 +24,9 @@ interface NeuralConnection {
   animDelay: number;
 }
 
+// Round to 2 decimal places to avoid floating-point drift between server and client
+const r2 = (n: number) => Math.round(n * 100) / 100;
+
 function generateNeuralNetwork(
   nodeCount: number,
   width: number,
@@ -40,11 +43,11 @@ function generateNeuralNetwork(
     const jitterY = Math.cos(i * 11.7) * 0.15;
 
     nodes.push({
-      x: (0.5 + Math.cos(angle) * radius * 0.45 + jitterX) * width,
-      y: (0.5 + Math.sin(angle) * radius * 0.45 + jitterY) * height,
-      size: 1.5 + (i % 4) * 0.8,
-      opacity: 0.15 + (i % 5) * 0.06,
-      pulseDelay: (i * 0.7) % 8,
+      x: r2((0.5 + Math.cos(angle) * radius * 0.45 + jitterX) * width),
+      y: r2((0.5 + Math.sin(angle) * radius * 0.45 + jitterY) * height),
+      size: r2(1.5 + (i % 4) * 0.8),
+      opacity: r2(0.1 + (i % 5) * 0.07),
+      pulseDelay: r2((i * 0.7) % 8),
     });
   }
 
@@ -64,8 +67,8 @@ function generateNeuralNetwork(
           y1: nodes[i].y,
           x2: nodes[j].x,
           y2: nodes[j].y,
-          opacity: 0.04 + (1 - dist / maxDist) * 0.08,
-          animDelay: (i + j) * 0.3 % 12,
+          opacity: r2(0.05 + (1 - dist / maxDist) * 0.10),
+          animDelay: r2((i + j) * 0.3 % 12),
         });
       }
     }
@@ -75,7 +78,8 @@ function generateNeuralNetwork(
 }
 
 export function BackgroundBlobs() {
-  const network = useMemo(() => generateNeuralNetwork(60, 3840, 1920), []);
+  // Increased node count to 120 for a denser neural net feel, as per reference
+  const network = useMemo(() => generateNeuralNetwork(120, 3840, 1920), []);
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" style={{ zIndex: 0 }} suppressHydrationWarning>
@@ -84,9 +88,7 @@ export function BackgroundBlobs() {
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse 80% 60% at 20% 30%, #4C1D9520 0%, transparent 60%),
-            radial-gradient(ellipse 60% 80% at 80% 70%, #7C3AED15 0%, transparent 50%),
-            radial-gradient(ellipse 100% 60% at 50% 100%, #5B21B618 0%, transparent 40%)
+            radial-gradient(circle at 50% 50%, #1a1040 0%, #0a0a2e 100%)
           `,
         }}
       />
@@ -128,13 +130,13 @@ export function BackgroundBlobs() {
               y1={conn.y1}
               x2={conn.x2}
               y2={conn.y2}
-              stroke="#7C3AED"
-              strokeWidth="1"
+              stroke="#7850DC" /* rgba(120, 80, 220, x) */
+              strokeWidth="1.5"
               opacity={conn.opacity}
             >
               <animate
                 attributeName="opacity"
-                values={`${conn.opacity * 0.3};${conn.opacity};${conn.opacity * 0.3}`}
+                values={`${r2(conn.opacity * 0.3)};${conn.opacity};${r2(conn.opacity * 0.3)}`}
                 dur={`${6 + (i % 4) * 2}s`}
                 begin={`${conn.animDelay}s`}
                 repeatCount="indefinite"
@@ -150,20 +152,20 @@ export function BackgroundBlobs() {
               cx={node.x}
               cy={node.y}
               r={node.size}
-              fill="#7C3AED"
+              fill="#8C64FF" /* rgba(140, 100, 255, x) */
               opacity={node.opacity}
             >
               <animate
                 attributeName="opacity"
-                values={`${node.opacity * 0.4};${node.opacity};${node.opacity * 0.4}`}
+                values={`${r2(node.opacity * 0.4)};${node.opacity};${r2(node.opacity * 0.4)}`}
                 dur={`${4 + (i % 3) * 2}s`}
                 begin={`${node.pulseDelay}s`}
                 repeatCount="indefinite"
               />
               <animate
                 attributeName="r"
-                values={`${node.size};${node.size * 1.5};${node.size}`}
-                dur={`${5 + (i % 4) * 1.5}s`}
+                values={`${node.size};${r2(node.size * 1.5)};${node.size}`}
+                dur={`${r2(5 + (i % 4) * 1.5)}s`}
                 begin={`${node.pulseDelay}s`}
                 repeatCount="indefinite"
               />
@@ -223,12 +225,10 @@ export function BackgroundBlobs() {
         ))}
       </svg>
 
-      {/* Organic blobs (larger, more visible) */}
+      {/* Minimal organic blobs to not overpower the neural network */}
       {[
-        { cx: "12%", cy: "25%", size: 700, color: "#7C3AED", delay: 0, dur: 25 },
-        { cx: "78%", cy: "18%", size: 550, color: "#5B21B6", delay: 5, dur: 30 },
-        { cx: "50%", cy: "65%", size: 800, color: "#4C1D95", delay: 10, dur: 35 },
-        { cx: "88%", cy: "72%", size: 500, color: "#7C3AED", delay: 3, dur: 28 },
+        { cx: "25%", cy: "35%", size: 800, color: "#1a1040", delay: 0, dur: 35 },
+        { cx: "75%", cy: "65%", size: 600, color: "#1a1040", delay: 10, dur: 40 },
       ].map((blob, i) => (
         <div
           key={`blob-${i}`}
@@ -238,10 +238,10 @@ export function BackgroundBlobs() {
             top: blob.cy,
             width: `${blob.size}px`,
             height: `${blob.size}px`,
-            background: `radial-gradient(circle, ${blob.color}25 0%, ${blob.color}08 40%, transparent 70%)`,
-            filter: "blur(60px)",
+            background: `radial-gradient(circle, ${blob.color}40 0%, transparent 70%)`,
+            filter: "blur(80px)",
             transform: "translate(-50%, -50%)",
-            animation: `blob-morph ${blob.dur}s ease-in-out infinite, blob-drift-${i % 3} ${blob.dur * 1.2}s ease-in-out infinite`,
+            animation: `blob-morph ${blob.dur}s ease-in-out infinite`,
             animationDelay: `${blob.delay}s`,
           }}
         />
