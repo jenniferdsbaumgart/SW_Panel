@@ -145,10 +145,26 @@ export function JourneyTrack() {
           opacity="0.8"
         />
 
-        {/* Energy pulse overlay (solid sliding glowing segment) */}
-        {/* We use strokeDasharray/offset to ensure there is exactly ONE segment 
-            traveling along the true path length, avoiding gradient bounding-box overlap.
-            pathLength="100" standardizes the bezier path's total length to exactly 100 units. */}
+        {/* Energy pulse overlay - Premium Soft Comet Tail */}
+        {/* We stack multiple strokes of varying lengths to simulate a smooth
+            comet tail, ensuring exactly ONE synced segment traveling along the path length. */}
+
+        {/* Faint long tail */}
+        <path
+          d={pathD}
+          fill="none"
+          stroke="#c8ff00"
+          strokeWidth="0.4"
+          strokeLinecap="round"
+          pathLength="100"
+          strokeDasharray="14 200"
+          opacity="0.2"
+        >
+          {/* Head goes from 0 to 120. Offset = Length - Head. 14 to -106 */}
+          <animate attributeName="stroke-dashoffset" values="14; -106" dur="8s" repeatCount="indefinite" />
+        </path>
+
+        {/* Mid-intensity body */}
         <path
           d={pathD}
           fill="none"
@@ -157,16 +173,27 @@ export function JourneyTrack() {
           strokeLinecap="round"
           filter="url(#trailGlow)"
           pathLength="100"
-          strokeDasharray="12 100" // 12% comet length, 100% gap (single comet)
+          strokeDasharray="6 200"
+          opacity="0.6"
         >
-          {/* We animate strokeDashoffset backward from 100 (beginning) to -15 (end) 
-              so the single comet crosses exactly once per loop. */}
-          <animate
-            attributeName="stroke-dashoffset"
-            values="100; -15"
-            dur="8s"
-            repeatCount="indefinite"
-          />
+          {/* Head goes from 0 to 120. Offset = Length - Head. 6 to -114 */}
+          <animate attributeName="stroke-dashoffset" values="6; -114" dur="8s" repeatCount="indefinite" />
+        </path>
+
+        {/* Bright core head */}
+        <path
+          d={pathD}
+          fill="none"
+          stroke="#ffffff"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          filter="url(#trailGlow)"
+          pathLength="100"
+          strokeDasharray="1 200"
+          opacity="1"
+        >
+          {/* Head goes from 0 to 120. Offset = Length - Head. 1 to -119 */}
+          <animate attributeName="stroke-dashoffset" values="1; -119" dur="8s" repeatCount="indefinite" />
         </path>
 
         {/* Dashed elegant guide line */}
@@ -179,11 +206,6 @@ export function JourneyTrack() {
           strokeDasharray="0.5 1.5"
           opacity="0.2"
         />
-
-        {/* Subtle energy dot traveling the path */}
-        <circle r="0.8" fill="#ffffff" filter="url(#trailGlow)">
-          <animateMotion dur="6s" repeatCount="indefinite" path={pathD} />
-        </circle>
 
         {/* Glowing Node Points behind each Stage */}
         {STAGE_POSITIONS.map((pos, i) => (
